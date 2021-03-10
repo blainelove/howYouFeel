@@ -1,6 +1,7 @@
 //test
 const imglist = document.querySelector("div#listsArr")
 const listForm = document.querySelector("form#listsArr")
+const newlistForm = document.querySelector("form#newlistsArr")
 
 function listarrfun(){
 
@@ -79,9 +80,36 @@ event.preventDefault()
     })
         
 })
+
+newlistForm.addEventListener('submit', event => {
+    event.preventDefault()
+    console.log("click", event.target)
+
+    const image = event.target.imagePic.value
+    const description = event.target.newDescription.value
+
+    fetch('http://localhost:3000/lists', {
+        method: "POST",
+        headers: { "Content-Type": "application/json",
+    
+                "Accept": "application/json"
+    },
+       
+        body: JSON.stringify({image: image, description: description})
+    })
+        .then(response => response.json())
+        .then(newObj => {
+            imglist.append(newObj)
+        
+        newlistForm.reset()
+        })
+    
+    
         
         
         
+})
+
 
 
 listarrfun()
