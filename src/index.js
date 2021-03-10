@@ -1,4 +1,5 @@
 //test
+const imglist = document.querySelector("div#listsArr")
 
 function listarrfun(){
 
@@ -9,10 +10,11 @@ function listarrfun(){
             listarr.forEach(list => {
                 const imgTag = document.createElement("img")
                 const pTag = document.createElement("p")
-                const imglist = document.querySelector("div#listsArr")
+                
 
                 pTag.textContent = list.created_at
                 imgTag.src = list.image
+                imgTag.dataset.id = list.id
                 
                 imglist.append(imgTag)
                 imglist.append(pTag)
@@ -20,4 +22,11 @@ function listarrfun(){
         })
 
 }
+
+imglist.addEventListener("click", event => {
+    
+    if (event.target.tagName === "IMG"){
+
+    }
+})
 listarrfun()
