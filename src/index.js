@@ -2,6 +2,7 @@
 const imglist = document.querySelector("div#listsArr")
 const listForm = document.querySelector("form#listsArr")
 const newlistForm = document.querySelector("form#newlistsArr")
+const deleteItem = document.querySelector("button#deleteItem")
 
 function listarrfun(){
 
@@ -40,6 +41,7 @@ imglist.addEventListener("click", event => {
            
            
             listForm.dataset.id = listObj.id
+            deleteItem.dataset.id = listObj.id
 
             image.src = listObj.image
             span.textContent = listObj.description
@@ -82,7 +84,7 @@ event.preventDefault()
 })
 
 newlistForm.addEventListener('submit', event => {
-    event.preventDefault()
+    // event.preventDefault()
     console.log("click", event.target)
 
     const image = event.target.imagePic.value
@@ -92,7 +94,7 @@ newlistForm.addEventListener('submit', event => {
         method: "POST",
         headers: { "Content-Type": "application/json",
     
-                "Accept": "application/json"
+                // "Accept": "application/json"
     },
        
         body: JSON.stringify({image: image, description: description})
@@ -102,13 +104,23 @@ newlistForm.addEventListener('submit', event => {
             imglist.append(newObj)
         
         newlistForm.reset()
-        })
-    
-    
-        
-        
+        })    
         
 })
+
+deleteItem.addEventListener('click', event => {
+    event.preventDefault()
+        console.log(event.target, "hello")
+    fetch(`http://localhost:3000/lists/${deleteItem.dataset.id}`,{
+        method: "DELETE",
+         })
+        .then(res => res.json())
+        .then(res => console.log(res))
+        })
+
+
+
+
 
 
 
