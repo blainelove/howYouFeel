@@ -4,12 +4,13 @@ const listForm = document.querySelector("form#listsArr")
 const newlistForm = document.querySelector("form#newlistsArr")
 const deleteItem = document.querySelector("button#deleteItem")
 
+
 function listarrfun(){
 
     fetch("http:localhost:3000/lists")
         .then(response => response.json())
         .then(listarr => {
-            console.log(listarr)
+          
             listarr.forEach(list => {
                 const imgTag = document.createElement("img")
                 const pTag = document.createElement("p")
@@ -18,6 +19,7 @@ function listarrfun(){
                 pTag.textContent = list.created_at
                 imgTag.src = list.image
                 imgTag.dataset.id = list.id
+                pTag.dataset.id = list.id
                 
                 imglist.append(imgTag)
                 imglist.append(pTag)
@@ -26,26 +28,59 @@ function listarrfun(){
 
 }
 
-imglist.addEventListener("click", event => {
+// imglist.addEventListener("click", event => {
 
-    if (event.target.tagName === "IMG"){
-    
-        fetch(`http:localhost:3000/lists/${event.target.dataset.id}`)
-            .then(response => response.json())
-            .then(listObj => {
+//     if (event.target.tagName === "IMG"){
+        
+//         fetch(`http:localhost:3000/lists/${event.target.dataset.id}`)
+//             .then(response => response.json())
+//             .then(listObj => {
             
-            const image = document.querySelector("img#image")
-            const span = document.querySelector("span#description")
-            const time = document.querySelector("span#time")
+//             const image = document.querySelector("img#image")
+//             const span = document.querySelector("span#description")
+            
         
            
            
-            listForm.dataset.id = listObj.id
-            deleteItem.dataset.id = listObj.id
+//             listForm.dataset.id = listObj.id
+//             deleteItem.dataset.id = listObj.id
 
-            image.src = listObj.image
-            span.textContent = listObj.description
-            time.textContent = listObj.created_at
+//             image.src = listObj.image
+//             span.textContent = listObj.description
+//             time.textContent = listObj.created_at
+           
+           
+        
+
+
+//         })
+//     }
+// })
+
+imglist.addEventListener("click", event => {
+    console.log("click", event.target.dataset.id)
+    if (event.target.tagName === "P"||event.target.tagName === "IMG"){
+        console.log('pass')
+
+    
+        fetch(`http:localhost:3000/lists/${event.target.dataset.id}`)
+            .then(response => response.json())
+            .then(timeObj => {//listObj change name
+            console.log(timeObj)
+            const image = document.querySelector("img#image")
+            const span = document.querySelector("span#description")
+            
+        
+           
+           
+            listForm.dataset.id = timeObj.id
+            deleteItem.dataset.id = timeObj.id
+
+            image.src = timeObj.image
+            span.textContent = timeObj.description
+            time.textContent = timeObj.created_at
+           
+           
         
 
 
@@ -84,8 +119,8 @@ event.preventDefault()
 })
 
 newlistForm.addEventListener('submit', event => {
-    // event.preventDefault()
-    console.log("click", event.target)
+    event.preventDefault()
+    
 
     const image = event.target.imagePic.value
     const description = event.target.newDescription.value
@@ -101,7 +136,19 @@ newlistForm.addEventListener('submit', event => {
     })
         .then(response => response.json())
         .then(newObj => {
-            imglist.append(newObj)
+            
+            const imgTag = document.createElement("img")
+            const pTag = document.createElement("p")
+                
+
+            pTag.textContent = newObj.created_at
+            imgTag.src = newObj.image
+            imgTag.dataset.id = newObj.id
+            pTag.dataset.id = newObj.id
+                
+            imglist.append(imgTag)
+            imglist.append(pTag)
+            
         
         newlistForm.reset()
         })    
@@ -119,9 +166,32 @@ deleteItem.addEventListener('click', event => {
         })
 
 
+const ul = document.querySelector("ul#to-do")
+function items (){
+fetch('http://localhost:3000/items')
+        .then(res => res.json())
+        .then(itemarr => {
+            console.log(ul)
+            itemarr.forEach(item => {
+                const li = document.createElement('li')
+                li.dataset.id = item.id
+                li.dataset.list_id = item.list_id 
+                const description = document.createElement('h6')
+                description.textContent = item.description
+                const complete = document.createElement('p')
+                complete.textContent = `Completed: ${item.complete}`
+                const priority = document.createElement('p')
+                priority.textContent = `Prority: ${item.priority}`
 
+                li.append(description, complete, priority)
+                console.log(li)
+                ul.append(li)
+                
 
+            })
+        })
 
+}
 
 
 listarrfun()

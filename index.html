@@ -12,11 +12,9 @@
         <div id = "listsArr">
             <!-- show lists images here -->
         </div>
-        <div>
-            <ul id = "to-do" >
-                <!--to-do item-->
-            </ul>
-        </div>
+        
+            
+        
         <div class = "characterInfo">
             <div id="info">
                 <p id="name">Daily List</p>
@@ -24,6 +22,9 @@
                 <h4>Update List <span id="list"></span> </h4>
                 <h6>Description: <span id="description"></span>  </h6>
                 <h6>Time Created: <span id="time"></span> </h6>
+                <ul id = "to-do" >
+                <!--to-do item-->
+                </ul>
                 <form id="listsArr">
                     <input type="hidden" value="list's id" id="listId"/> <!-- Assign character id as a value here -->
                     <input type="text" placeholder="Enter Description" id="description"/>
@@ -37,6 +38,7 @@
                     <input type="text" placeholder="Enter Image url" id="imagePic"/>
                     <input type="submit" value="Create List"/>
                 </form>
+                
                 <button id="deleteItem">Delete List</button>
             </div>
         </div>
