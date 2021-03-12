@@ -1,6 +1,7 @@
 //test
 const imglist = document.querySelector("div#listsArr")
 const listForm = document.querySelector("form#listsArr")
+const itemForm = document.querySelector("form#itemCreate")
 const newlistForm = document.querySelector("form#newlistsArr")
 const deleteItem = document.querySelector("button#DeleteList")
 const ul = document.querySelector("ul#to-do")
@@ -11,7 +12,7 @@ const listItems = document.querySelector("div#info ul")
 
 
 function listarrfun(){
-
+    console.log(ul)
     fetch("http:localhost:3000/lists")
         .then(response => response.json())
         .then(listarr => {
@@ -56,9 +57,9 @@ function listarrfun(){
 
 imglist.addEventListener("click", event => {
     event.preventDefault()
-    console.log(event.target)
+  
     
-    // hellLI.items.removeChild( hellLI );
+
     
     if (event.target.tagName === "P"||event.target.tagName === "IMG"){
         
@@ -73,7 +74,7 @@ imglist.addEventListener("click", event => {
             const image = document.querySelector("img#image")
             const span = document.querySelector("span#description")
             
-           
+            itemForm.dataset.id = timeObj.id
             listForm.dataset.id = timeObj.id
             deleteItem.dataset.id = timeObj.id
 
@@ -210,11 +211,52 @@ deleteItem.addEventListener('click', event => {
         .then(res => console.log(res))
         listarrfun()
 
+})
+
+itemForm.addEventListener('submit', event => {
+    event.preventDefault()
+    
+    const description = event.target.ItemDescription.value
+    const priority = event.target.PriorityStatus.value
+    const complete = event.target.CompleteStatus.value
+    console.log(itemForm.dataset.id)
+
+    fetch('http://localhost:3000/items', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            list_id: itemForm.dataset.id,
+            description: description,
+            priority: priority,
+            complete: complete
+        })
+    })
+        .then(res => res.json())
+        .then(item => {
+            console.log(item)
+            const liTagz = document.createElement('li')
+            const delButton = document.createElement('BUTTON')
+            delButton.classList.add("monkey")
+            delButton.innerHTML = "Delete Item"
+            delButton.dataset.id = item.id
+            liTagz.dataset.id = item.id
+            liTagz.dataset.list_id = item.list_id
+            const description = document.createElement('p')
+            description.textContent = item.description
+            const complete = document.createElement('p')
+            complete.textContent = `Complete: ${item.complete}`
+            const priority = document.createElement('p')
+            priority.textContent = `Priority: ${item.priority}`
+                
+               
+            liTagz.append(description, complete, priority, delButton)
+            console.log(liTagz)
+            items.append(liTagz)
         })
 
-items
-
-
+})
 // function items (){
 // fetch('http://localhost:3000/items')
 //         .then(res => res.json())
