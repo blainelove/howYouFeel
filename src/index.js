@@ -241,6 +241,24 @@ itemForm.addEventListener('submit', event => {
             delButton.classList.add("monkey")
             delButton.innerHTML = "Delete Item"
             delButton.dataset.id = item.id
+            delButton.addEventListener("click", event => {
+                console.log(event.target)
+                fetch(`http://localhost:3000/items/${event.target.dataset.id}`,{
+                        method: "DELETE",
+                        headers: { "Content-Type": "application/json",
+                    },
+                    })
+
+                    .then(res => res.json())
+                    .then(data => {
+                        
+                        let li = listItems.querySelector(`[data-id="${event.target.dataset.id}"]`)
+                        li.remove()
+                    })
+                    listarrfun()
+
+                    }
+            )
             liTagz.dataset.id = item.id
             liTagz.dataset.list_id = item.list_id
             const description = document.createElement('p')
@@ -254,6 +272,8 @@ itemForm.addEventListener('submit', event => {
             liTagz.append(description, complete, priority, delButton)
             console.log(liTagz)
             items.append(liTagz)
+            listarrfun()
+            itemForm.reset()
         })
 
 })
