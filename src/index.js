@@ -81,7 +81,7 @@ imglist.addEventListener("click", event => {
 
             imagedis.src = timeObj.image
             spandis.textContent = timeObj.description
-            time.textContent = timeObj.created_at
+            time.textContent = timeObj.created_at.split("T")[0]
 
             timeObj.items.forEach(item => {
                 console.log(item)
