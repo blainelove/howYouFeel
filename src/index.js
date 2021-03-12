@@ -2,9 +2,12 @@
 const imglist = document.querySelector("div#listsArr")
 const listForm = document.querySelector("form#listsArr")
 const newlistForm = document.querySelector("form#newlistsArr")
-const deleteItem = document.querySelector("button#deleteItem")
+const deleteItem = document.querySelector("button#DeleteList")
 const ul = document.querySelector("ul#to-do")
 const items = document.querySelector('div#info ul')
+const but = document.querySelector("button.monkey")
+const listItems = document.querySelector("div#info ul")
+//29
 
 
 function listarrfun(){
@@ -12,7 +15,8 @@ function listarrfun(){
     fetch("http:localhost:3000/lists")
         .then(response => response.json())
         .then(listarr => {
-          
+            ul.innerHTML = " "
+            imglist.innerHTML = " "
             listarr.forEach(list => {
                 
                 const imgTag = document.createElement("img")
@@ -37,7 +41,7 @@ function listarrfun(){
                     complete.textContent = `Complete: ${item.complete}`
                     const priority = document.createElement('p')
                     priority.textContent =`Priority: ${item.priority}`
-
+                    
                     liTag.append(description, complete, priority)
                     ul.append(liTag)
                 })
@@ -51,18 +55,21 @@ function listarrfun(){
 
 
 imglist.addEventListener("click", event => {
-    console.log("click", event.target.dataset.id)
+    event.preventDefault()
+    console.log(event.target)
     
-    
+    // hellLI.items.removeChild( hellLI );
     
     if (event.target.tagName === "P"||event.target.tagName === "IMG"){
         
-
+       
     
         fetch(`http:localhost:3000/lists/${event.target.dataset.id}`)
             .then(response => response.json())
             .then(timeObj => {//listObj change name
             console.log(timeObj)
+            items.innerHTML = " "
+
             const image = document.querySelector("img#image")
             const span = document.querySelector("span#description")
             
@@ -75,18 +82,47 @@ imglist.addEventListener("click", event => {
             time.textContent = timeObj.created_at
 
             timeObj.items.forEach(item => {
-                const liTag = document.createElement('li')
-                liTag.dataset.id = item.id
-                liTag.dataset.list_id = item.list_id
+                console.log(item)
+                const liTagz = document.createElement('li')
+                const delButton = document.createElement('BUTTON')
+                delButton.classList.add("monkey")
+                delButton.innerHTML = "Delete Item"
+                delButton.dataset.id = item.id
+                delButton.addEventListener("click", event => {
+                    console.log(event.target)
+                    fetch(`http://localhost:3000/items/${event.target.dataset.id}`,{
+                            method: "DELETE",
+                            headers: { "Content-Type": "application/json",
+                        },
+                    
+                        })
+
+                        .then(res => res.json())
+                        .then(data => {
+                            
+                            let li = listItems.querySelector(`[data-id="${event.target.dataset.id}"]`)
+                            li.remove()
+                        })
+                        listarrfun()
+
+
+                        }
+
+
+                )
+                liTagz.dataset.id = item.id
+                liTagz.dataset.list_id = item.list_id
                 const description = document.createElement('p')
                 description.textContent = item.description
                 const complete = document.createElement('p')
                 complete.textContent = `Complete: ${item.complete}`
                 const priority = document.createElement('p')
                 priority.textContent = `Priority: ${item.priority}`
-
-                liTag.append(description, complete, priority)
-                items.append(liTag)
+                
+               
+                liTagz.append(description, complete, priority, delButton)
+                items.append(liTagz)
+                console.log(items)
            
             })
         })
@@ -102,7 +138,7 @@ event.preventDefault()
     const description = event.target.description.value
 
     const newObj = {image, description}
-
+    console.log(newObj)
     fetch(`http://localhost:3000/lists/${listForm.dataset.id}`,{
          method: "PATCH",
 
@@ -117,9 +153,8 @@ event.preventDefault()
         .then(newObj => {
 
         console.log(newObj)
-
-
-
+        listForm.reset()
+        listarrfun()
     })
         
 })
@@ -166,12 +201,18 @@ deleteItem.addEventListener('click', event => {
         console.log(event.target, "hello")
     fetch(`http://localhost:3000/lists/${deleteItem.dataset.id}`,{
         method: "DELETE",
-         })
-        .then(res => res.json())
-        .then(res => console.log(res))
+        headers: { "Content-Type": "application/json",
+        },
+       
         })
 
+        .then(res => res.json())
+        .then(res => console.log(res))
+        listarrfun()
 
+        })
+
+items
 
 
 // function items (){
@@ -199,5 +240,12 @@ deleteItem.addEventListener('click', event => {
 //         })
 
 // }
+// function handleDelete (id){
+        // console.log("click",event.target)
+        
 
+
+// document.addEventListener
+//     // if (event.target === but)
+// })
 listarrfun()

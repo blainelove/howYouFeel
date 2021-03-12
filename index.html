@@ -25,7 +25,7 @@
                 <h4>Update List <span id="list"></span> </h4>
                 <h6>Description: <span id="description"></span>  </h6>
                 <h6>Time Created: <span id="time"></span> </h6>
-                <p>List Items:</p>
+                <h4>List Items:</h4>
                 <ul name:listItems> 
 
                 </ul>
@@ -44,8 +44,26 @@
                     <input type="text" placeholder="Enter Image url" id="imagePic"/>
                     <input type="submit" value="Create List"/>
                 </form>
+                <h4>Update Items:</h4>
+                <div id:itemForm>
+                    <form id="updateItem">
+                        <input type="hidden" value="list's id" id="listId"/> <!-- Assign character id as a value here -->
+                        <input type="text" placeholder="Enter Description" name="Item Description"/>
+                        <input type="text" placeholder="Priority" name="CompleteStatus"/>
+                        <input type="submit" value="Update Task"/>
+                    </form>
+                </div>
+                <h4>Create Items</h4>
+                <div name:createitem>
+                    <form id="">
+                        <input type="hidden" value="list's id" id="listId"/> <!-- Assign character id as a value here -->
+                        <input type="text" placeholder="Enter Description" name="Item Description"/>
+                        <input type="text" placeholder="Priority" name="CompleteStatus"/>
+                        <input type="submit" value="Create Task"/>
+                    </form>
+                </div>
                 
-                <button id="deleteItem">Delete List</button>
+                <button id="DeleteList">Delete List</button>
             </div>
         </div>
         <script src="src/index.js"></script>
